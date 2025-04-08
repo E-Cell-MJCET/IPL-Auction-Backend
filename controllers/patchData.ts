@@ -7,7 +7,7 @@ import { createLogEntry, createSystemLogEntry } from '../helpers/logsEntry';
 // Update team data might not be useful if we are doing from mongoDB compass
 export const updateTeam = async (req: Request, res: Response) => {
     try {
-        const { teamID } = req.params;
+        const { teamID } = req.body;
         const updateData = req.body;
 
         await connectDB();

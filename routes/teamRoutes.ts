@@ -18,7 +18,7 @@ router.get('/sold-players', getSoldPlayers);
 router.get('/logs', getLogs);
 
 // PATCH routes for updating data
-router.patch('/team/:teamID', updateTeam);
-router.patch('/player/:playerId', updatePlayer);
+router.post('/team-update', updateTeam);
+router.post('/player-update', updatePlayer);
 
 export default router;
