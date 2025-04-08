@@ -19,15 +19,15 @@ const playerSchema = new mongoose.Schema({
     },
     isSold : {
         type : Boolean,
-        required : true,
+        required : false,
     },
     role : {
         type: String,
-        required : true,
+        // required : true,
     },
     nationality : {
         type: String,
-        required : true,
+        // required : true,
     }, 
     basePrice : {
         type: Number,

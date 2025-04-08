@@ -1,10 +1,24 @@
 import type { Response, Request } from 'express';
-import {connectDB} from '../db/connectDB';
+import { connectDB } from '../db/connectDB';
 import Team from '../models/Team';
+import Player from '../models/Players';
+import Logs from '../models/logs';
 
-export default async function putTeamData(req: Request, res: Response) {
+// Add a new team
+export const addTeam = async (req: Request, res: Response) => {
     try {
-        const { teamName, teamID, teamImage, teamBalance, teamRating, numberofPlayers, player_bought, number_foreign } = req.body;
+        const { 
+            teamName, 
+            teamID, 
+            teamImage, 
+            teamBalance, 
+            teamRating, 
+            numberofPlayers, 
+            player_bought, 
+            number_foreign,
+            colorCode,
+            basePrice
+        } = req.body;
 
         // Connect to database
         await connectDB();
@@ -18,21 +32,185 @@ export default async function putTeamData(req: Request, res: Response) {
             teamRating,
             numberofPlayers,
             player_bought,
-            number_foreign
+            number_foreign,
+            colorCode,
+            basePrice
         });
 
         // Save the team to database
         const savedTeam = await newTeam.save();
 
         res.status(201).json({
-            message: "Team data saved successfully",
+            success: true,
+            message: "Team added successfully",
             data: savedTeam
         });
     } catch (error) {
-        console.error("Error saving team data:", error);
+        console.error("Error adding team:", error);
         res.status(500).json({
-            message: "Error saving team data",
+            success: false,
+            message: "Error adding team",
             error: error instanceof Error ? error.message : "Unknown error"
         });
     }
-}
+};
+
+// Add a new player
+export const addPlayer = async (req: Request, res: Response) => {
+    try {
+        const { 
+            playerName, 
+            playerId, 
+            rating, 
+            boughtAt, 
+            basePrice,
+            pool
+        } = req.body;
+
+        // Connect to database
+        await connectDB();
+
+        // Create new player document
+        const newPlayer = new Player({
+            playerName,
+            playerId,
+            rating,
+            boughtAt,
+            basePrice,
+            pool
+        });
+
+        // Save the player to database
+        const savedPlayer = await newPlayer.save();
+
+        res.status(201).json({
+            success: true,
+            message: "Player added successfully",
+            data: savedPlayer
+        });
+    } catch (error) {
+        console.error("Error adding player:", error);
+        res.status(500).json({
+            success: false,
+            message: "Error adding player",
+            error: error instanceof Error ? error.message : "Unknown error"
+        });
+    }
+};
+
+// Sell a player to a team
+export const sellPlayer = async (req: Request, res: Response) => {
+    try {
+        const { playerId, teamID, soldPrice } = req.body;
+
+        // Connect to database
+        await connectDB();
+
+        // Find the player
+        const player = await Player.findOne({ playerId });
+        if (!player) {
+            return res.status(404).json({
+                success: false,
+                message: "Player not found"
+            });
+        }
+
+        // Find the team
+        const team = await Team.findOne({ teamID });
+        if (!team) {
+            return res.status(404).json({
+                success: false,
+                message: "Team not found"
+            });
+        }
+
+        // Check if team has enough balance
+        if (team.teamBalance < soldPrice) {
+            return res.status(400).json({
+                success: false,
+                message: "Team does not have enough balance"
+            });
+        }
+
+        // Update player with bought price
+        player.boughtAt = soldPrice;
+        await player.save();
+
+        // Update team balance and player count
+        team.teamBalance -= soldPrice;
+        team.player_bought += 1;
+        team.numberofPlayers += 1;
+        await team.save();
+
+        // Create transaction log
+        const transactionLog = new Logs({
+            timeStamp: new Date(),
+            soldTo: team.teamName,
+            playerName: player.playerName,
+            playerId: player.playerId,
+            price: soldPrice,
+            transactionId: Date.now() // Using timestamp as transaction ID
+        });
+
+        await transactionLog.save();
+
+        res.status(200).json({
+            success: true,
+            message: "Player sold successfully",
+            data: {
+                player,
+                team,
+                transaction: transactionLog
+            }
+        });
+    } catch (error) {
+        console.error("Error selling player:", error);
+        res.status(500).json({
+            success: false,
+            message: "Error selling player",
+            error: error instanceof Error ? error.message : "Unknown error"
+        });
+    }
+};
+
+// Add a new transaction log
+export const addLog = async (req: Request, res: Response) => {
+    try {
+        const { 
+            soldTo, 
+            playerName, 
+            playerId, 
+            price, 
+            transactionId 
+        } = req.body;
+
+        // Connect to database
+        await connectDB();
+
+        // Create new log document
+        const newLog = new Logs({
+            timeStamp: new Date(),
+            soldTo,
+            playerName,
+            playerId,
+            price,
+            transactionId: transactionId || Date.now() // Use provided ID or generate one
+        });
+
+        // Save the log to database
+        const savedLog = await newLog.save();
+
+        res.status(201).json({
+            success: true,
+            message: "Transaction log added successfully",
+            data: savedLog
+        });
+    } catch (error) {
+        console.error("Error adding transaction log:", error);
+        res.status(500).json({
+            success: false,
+            message: "Error adding transaction log",
+            error: error instanceof Error ? error.message : "Unknown error"
+        });
+    }
+};

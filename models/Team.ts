@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 
-const teamSchema = new mongoose.Schema({
+const teamSchema = new mongoose.Schema({    
     teamName: {
         type: String,
         required: true
@@ -17,6 +17,14 @@ const teamSchema = new mongoose.Schema({
     teamBalance: {
         type: Number,
         required: true
+    },
+    colorCode:{
+        type:String,
+        required:false
+    },
+    basePrice:{
+        type:Number,
+        required:false
     },
     teamRating: {
         type: Number,

@@ -1,30 +1,37 @@
-import express, {type Request,type Response} from 'express';
+import express, { type Request, type Response } from 'express';
 import teamRoutes from './routes/teamRoutes';
 import { connectDB } from './db/connectDB';
+import cors from 'cors';
 
 const app = express();
-const port = 8080;
+const port = process.env.PORT || 8080;
 
+// Middleware
 app.use(express.json());
+app.use(cors());
 
-// Team routes
-app.use('/api/post', teamRoutes);
+// Connect to MongoDB
+connectDB()
+  .then(() => console.log("MongoDB connected successfully"))
+  .catch((err) => console.error("MongoDB connection error:", err));
 
-app.get('/',(req:Request,res:Response)=>{
-    res.send("Hey E-cell Backend");
-})
+// API Routes
+app.use('/api', teamRoutes);
 
-app.post('/api/test',(req:Request,res:Response)=>{
-    const {teamName,teamMembers} = req.body;
+// Root route
+app.get('/', (req: Request, res: Response) => {
+  res.send("Welcome to IPL Auction Backend API");
+});
 
-    res.json({
-        message:"Data received successfully",
-    })
-})
+// Health check endpoint
+app.get('/health', (req: Request, res: Response) => {
+  res.status(200).json({
+    status: 'ok',
+    message: 'Server is running'
+  });
+});
 
-connectDB();
-console.log("MonogDB connected successfully")
-
-app.listen(port,()=>{
-    console.log("Server is running on port",port);
-})
+// Start the server
+app.listen(port, () => {
+  console.log(`Server is running on port ${port}`);
+});

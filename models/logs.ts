@@ -14,7 +14,7 @@ const logsSchema = new mongoose.Schema({
         required: true,
     },
     playerId: {
-        type: Number,
+        type: String,// changed from Number to String (as playerId is a string in Player model)
         requied: true,
         Unique: true,
     },
@@ -28,3 +28,5 @@ const logsSchema = new mongoose.Schema({
         Unique: true,
     },
 });
+
+export default mongoose.model("Logs",logsSchema);
