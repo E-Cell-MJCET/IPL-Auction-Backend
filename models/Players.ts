@@ -33,7 +33,7 @@ const playerSchema = new mongoose.Schema({
         type: String,
     },
     pool : {
-        type: String,
+        type: Number,
         required: true,
     },
 });
