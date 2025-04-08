@@ -89,21 +89,24 @@ Navigate to:
 - http://localhost:8080/api/logs - To get all transaction logs
 
 
-**Patch Requests**
+**Patch Requests** -> are through post requests
 <br>
+use post method
 /api/team/:teamID
-```/api/team/MI001```
+```/api/team```
 ```
 {
+  "teamID:  "MI001",
   "teamName": "Mumbai Indians 2025",
   "teamImage": "https://example.com/mi-logo-updated.png",
   "numberofPlayers": 27
 }
 ```
 /api/player/:playerId
-```/api/player/VK001```
+```/api/player```
 ```
 {
+  "playerID":"VK001",
   "rating": 95,
   "basePrice": 250000,
   "pool": "Batsman-Captain"
