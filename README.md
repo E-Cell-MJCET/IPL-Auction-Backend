@@ -87,3 +87,25 @@ Navigate to:
 - http://localhost:8080/api/players - To get all players
 - http://localhost:8080/api/sold-players - To get all sold players
 - http://localhost:8080/api/logs - To get all transaction logs
+
+
+**Patch Requests**
+<br>
+/api/team/:teamID
+```/api/team/MI001```
+```
+{
+  "teamName": "Mumbai Indians 2025",
+  "teamImage": "https://example.com/mi-logo-updated.png",
+  "numberofPlayers": 27
+}
+```
+/api/player/:playerId
+```/api/player/VK001```
+```
+{
+  "rating": 95,
+  "basePrice": 250000,
+  "pool": "Batsman-Captain"
+}
+```

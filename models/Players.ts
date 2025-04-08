@@ -30,7 +30,7 @@ const playerSchema = new mongoose.Schema({
         // required : true,
     }, 
     basePrice : {
-        type: Number,
+        type: String,
     },
     pool : {
         type: String,

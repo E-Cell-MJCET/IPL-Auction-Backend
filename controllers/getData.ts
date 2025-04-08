@@ -3,7 +3,6 @@ import Team from "../models/Team";
 import Player from "../models/Players";
 import Logs from "../models/logs";
 
-// Get all teams or a specific team by ID
 export const getTeamData = async (req: Request, res: Response) => {
     try {
         const { teamID } = req.query;
@@ -39,13 +38,11 @@ export const getTeamData = async (req: Request, res: Response) => {
     }
 };
 
-// Get all players or players by specific criteria
 export const getPlayerData = async (req: Request, res: Response) => {
     try {
         const { playerId, pool } = req.query;
         
         if (playerId) {
-            // Get specific player by ID
             const player = await Player.findOne({ playerId });
             if (!player) {
                 return res.status(404).json({
@@ -82,7 +79,6 @@ export const getPlayerData = async (req: Request, res: Response) => {
     }
 };
 
-// Get all sold players (players with boughtAt value)
 export const getSoldPlayers = async (req: Request, res: Response) => {
     try {
         // Find players that have been bought (boughtAt field exists and is not null)
@@ -102,7 +98,6 @@ export const getSoldPlayers = async (req: Request, res: Response) => {
     }
 };
 
-// Get transaction logs
 export const getLogs = async (req: Request, res: Response) => {
     try {
         const { playerId, transactionId } = req.query;
