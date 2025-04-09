@@ -43,7 +43,7 @@ raw JSON sample
 ```
 {
   "playerName": "Virat Kohli",
-  "playerId": "VK001",
+  "playerId": "VK0  01",
   "rating": 90,
   "boughtAt": null,
   "basePrice": 200000,
