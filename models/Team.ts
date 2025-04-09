@@ -11,22 +11,12 @@ const teamSchema = new mongoose.Schema(
       required: true,
       unique: true,
     },
-    teamImage: {
-      type: String,
-      required: true,
-    },
+
     teamBalance: {
       type: Number,
       required: true,
     },
-    colorCode: {
-      type: String,
-      required: false,
-    },
-    basePrice: {
-      type: Number,
-      required: false,
-    },
+
     teamRating: {
       type: Number,
       required: true,
