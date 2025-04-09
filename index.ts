@@ -32,6 +32,6 @@ app.get('/health', (req: Request, res: Response) => {
 });
 
 // Start the server
-app.listen(port, () => {
+app.listen(8080,'0.0.0.0' ,() => {
   console.log(`Server is running on port ${port}`);
 });

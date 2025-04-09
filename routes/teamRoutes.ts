@@ -20,7 +20,7 @@ router.post("/logs", addLog);
 
 // GET routes for retrieving data
 router.post("/teams", getTeamData);
-router.get("/teamsplayers", getTeamPlayerData);
+router.post("/teamsplayers", getTeamPlayerData);
 router.post("/playersPocket", getPlayerPoolData);
 router.post("/players", getPlayerData);
 router.get("/sold-players", getSoldPlayers);
