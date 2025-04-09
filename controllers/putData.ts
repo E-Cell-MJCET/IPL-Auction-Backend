@@ -140,7 +140,7 @@ export const sellPlayer = async (req: Request, res: Response) => {
 
     // Update team balance and player count
     team.teamBalance -= soldPrice;
-    team.player_bought += 1;
+    team.player_bought.push(player.playerId); // Add player ID to the team's bought players
     team.numberofPlayers += 1;
     await team.save();
 
