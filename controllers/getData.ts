@@ -5,7 +5,7 @@ import Logs from "../models/logs";
 
 export const getTeamData = async (req: Request, res: Response) => {
     try {
-        const { teamID } = req.query;
+        const { teamID } = req.body;
         
         if (teamID) {
             // Get specific team by ID
@@ -40,7 +40,7 @@ export const getTeamData = async (req: Request, res: Response) => {
 
 export const getPlayerData = async (req: Request, res: Response) => {
     try {
-        const { playerId, pool } = req.query;
+        const { playerId, pool } = req.body;
         
         if (playerId) {
             const player = await Player.findOne({ playerId });
@@ -100,7 +100,7 @@ export const getSoldPlayers = async (req: Request, res: Response) => {
 
 export const getLogs = async (req: Request, res: Response) => {
     try {
-        const { playerId, transactionId } = req.query;
+        const { playerId, transactionId } = req.body;
         
         if (transactionId) {
             // Get specific log by transaction ID
