@@ -78,7 +78,8 @@ export const getTeamPlayerData = async (req: Request, res: Response) => {
 export const getPlayerData = async (req: Request, res: Response) => {
   try {
     const { playerId, pool } = req.body;
-
+    console.log("playerId", playerId);
+    console.log("pool", pool);
     if (playerId) {
       const player = await Player.findOne({ playerId });
       if (!player) {
@@ -94,7 +95,7 @@ export const getPlayerData = async (req: Request, res: Response) => {
       });
     } else if (pool) {
       // Get players by pool
-      const players = await Player.find({ pool });
+      const players = await Player.find({ pocket: pool });
       return res.status(200).json({
         success: true,
         data: players,
@@ -115,7 +116,24 @@ export const getPlayerData = async (req: Request, res: Response) => {
     });
   }
 };
-
+export const getPlayerPoolData = async (req: Request, res: Response) => {
+  try {
+    const { pool } = req.body;
+    console.log("pool", pool);
+    // Get players by pool
+    const players = await Player.find({ pocket: pool });
+    return res.status(200).json({
+      success: true,
+      data: players,
+    });
+  } catch (error: any) {
+    return res.status(500).json({
+      success: false,
+      message: "Error fetching player data",
+      error: error.message,
+    });
+  }
+};
 export const getSoldPlayers = async (req: Request, res: Response) => {
   try {
     // Find players that have been bought (boughtAt field exists and is not null)
