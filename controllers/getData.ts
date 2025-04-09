@@ -77,36 +77,47 @@ export const getTeamPlayerData = async (req: Request, res: Response) => {
 };
 export const getPlayerData = async (req: Request, res: Response) => {
   try {
-    const { playerId, pool } = req.body;
+    const { page = 1, limit = 50 } = req.body; // Default to page 1 and 50 players per page
 
-    if (playerId) {
-      const player = await Player.findOne({ playerId });
-      if (!player) {
-        return res.status(404).json({
-          success: false,
-          message: "Player not found",
-        });
-      }
+    // Convert page and limit to numbers
+    const pageNumber = parseInt(page as string, 10);
+    const limitNumber = parseInt(limit as string, 10);
 
-      return res.status(200).json({
-        success: true,
-        data: player,
-      });
-    } else if (pool) {
-      // Get players by pool
-      const players = await Player.find({ pool });
-      return res.status(200).json({
-        success: true,
-        data: players,
-      });
-    } else {
-      // Get all players
-      const players = await Player.find();
-      return res.status(200).json({
-        success: true,
-        data: players,
-      });
-    }
+    // Fetch players with pagination
+    const players = await Player.find()
+      .skip((pageNumber - 1) * limitNumber) // Skip players for previous pages
+      .limit(limitNumber); // Limit the number of players returned
+
+    // Get the total count of players
+    const totalPlayers = await Player.countDocuments();
+
+    return res.status(200).json({
+      success: true,
+      data: players,
+      pagination: {
+        currentPage: pageNumber,
+        totalPages: Math.ceil(totalPlayers / limitNumber),
+        totalPlayers,
+      },
+    });
+  } catch (error: any) {
+    return res.status(500).json({
+      success: false,
+      message: "Error fetching player data",
+      error: error.message,
+    });
+  }
+};
+export const getPlayerPoolData = async (req: Request, res: Response) => {
+  try {
+    const { pocket } = req.body;
+    console.log("pool", pocket);
+    // Get players by pool
+    const players = await Player.find({ pocket });
+    return res.status(200).json({
+      success: true,
+      data: players,
+    });
   } catch (error: any) {
     return res.status(500).json({
       success: false,
