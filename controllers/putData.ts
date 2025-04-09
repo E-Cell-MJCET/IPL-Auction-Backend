@@ -10,14 +10,12 @@ export const addTeam = async (req: Request, res: Response) => {
     const {
       teamName,
       teamID,
-      teamImage,
+
       teamBalance,
       teamRating,
       numberofPlayers,
       player_bought,
       number_foreign,
-      colorCode,
-      basePrice,
     } = req.body;
 
     // Connect to database
@@ -27,14 +25,12 @@ export const addTeam = async (req: Request, res: Response) => {
     const newTeam = new Team({
       teamName,
       teamID,
-      teamImage,
+
       teamBalance,
       teamRating,
       numberofPlayers,
       player_bought,
       number_foreign,
-      colorCode,
-      basePrice,
     });
 
     // Save the team to database

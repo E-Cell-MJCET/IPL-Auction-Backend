@@ -78,19 +78,16 @@ export const getTeamPlayerData = async (req: Request, res: Response) => {
 export const getPlayerData = async (req: Request, res: Response) => {
   try {
     const { page = 1, limit = 50 } = req.body; // Default to page 1 and 50 players per page
-
-    // Convert page and limit to numbers
+    console.log("totalPlayers 1");
     const pageNumber = parseInt(page as string, 10);
     const limitNumber = parseInt(limit as string, 10);
-
-    // Fetch players with pagination
-    const players = await Player.find()
-      .skip((pageNumber - 1) * limitNumber) // Skip players for previous pages
+    console.log("totalPlayers 2");
+    const players = await Player.find() // Skip players for previous pages
       .limit(limitNumber); // Limit the number of players returned
-
+    console.log("totalPlayers 3");
     // Get the total count of players
     const totalPlayers = await Player.countDocuments();
-
+    console.log("totalPlayers", totalPlayers);
     return res.status(200).json({
       success: true,
       data: players,
