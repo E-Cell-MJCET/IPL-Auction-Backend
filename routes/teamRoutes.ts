@@ -2,7 +2,7 @@ import express from "express";
 import { addTeam, addPlayer, sellPlayer, addLog } from "../controllers/putData";
 import {
   getTeamData,
-  getTeamPlayerData
+  getTeamPlayerData,
   getPlayerData,
   getSoldPlayers,
   getLogs,

@@ -27,10 +27,11 @@ const playerSchema = new mongoose.Schema({
   },
   nationality: {
     type: String,
-    // required : true,
+    required : true,
   },
   basePrice: {
     type: String,
+    required:true,
   },
   pocket: {
     type: Number,
