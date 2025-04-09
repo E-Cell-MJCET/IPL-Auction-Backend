@@ -35,8 +35,8 @@ const teamSchema = new mongoose.Schema({
         required: true
     },
     player_bought: {
-        type: Number,
-        required: true
+        type: Array,
+        required: []
     },
     number_foreign: {
         type: Number,
