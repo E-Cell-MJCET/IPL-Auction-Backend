@@ -7,8 +7,8 @@ const playerSchema = new mongoose.Schema({
   },
   playerId: {
     type: String,
-    required: true,
-    Unique: true,
+    // required: true,
+    // Unique: true,
   },
   rating: {
     type: Number,
@@ -27,14 +27,14 @@ const playerSchema = new mongoose.Schema({
   },
   nationality: {
     type: String,
-    required : true,
+    required: true,
   },
   basePrice: {
     type: String,
-    required:true,
+    required: true,
   },
   pocket: {
-    type: Number,
+    type: String,
     required: true,
   },
 });

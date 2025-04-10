@@ -2,33 +2,19 @@ import { type Request, type Response } from "express";
 import Team from "../models/Team";
 import Player from "../models/Players";
 import Logs from "../models/logs";
+import mongoose from "mongoose";
 
 export const getTeamData = async (req: Request, res: Response) => {
   try {
-    const { teamID } = req.body;
+    // Get all teams with the specified fields
+    const teams = await Team.find().select(
+      "teamName teamBalance teamRating numberofPlayers number_foreign"
+    );
 
-    if (teamID) {
-      // Get specific team by ID
-      const team = await Team.findOne({ teamID });
-      if (!team) {
-        return res.status(404).json({
-          success: false,
-          message: "Team not found",
-        });
-      }
-
-      return res.status(200).json({
-        success: true,
-        data: team,
-      });
-    } else {
-      // Get all teams
-      const teams = await Team.find();
-      return res.status(200).json({
-        success: true,
-        data: teams,
-      });
-    }
+    return res.status(200).json({
+      success: true,
+      data: teams,
+    });
   } catch (error: any) {
     return res.status(500).json({
       success: false,
@@ -50,16 +36,26 @@ export const getTeamPlayerData = async (req: Request, res: Response) => {
           message: "Team not found",
         });
       }
-
+      let players_bought; // Initialize to an empty array if undefined
       // Fetch player details for all players in the players_bought array
-      const players = await Player.find({
-        playerId: { $in: team.player_bought },
-      });
+      if (team.player_bought && team.player_bought.length > 0) {
+        const playerIds = team.player_bought.map(
+          (id) => new mongoose.Types.ObjectId(id)
+        );
+        const players = await Player.find({ _id: { $in: playerIds } });
+        console.log(players);
+        players_bought = players;
+      } else {
+        console.log("No players found for this team.");
+      }
+
+
+
 
       return res.status(200).json({
         success: true,
         team: team,
-        players: players,
+        players: players_bought,
       });
     } else {
       return res.status(400).json({
@@ -183,6 +179,26 @@ export const getLogs = async (req: Request, res: Response) => {
     return res.status(500).json({
       success: false,
       message: "Error fetching transaction logs",
+      error: error.message,
+    });
+  }
+};
+
+export const getUnsoldPlayers = async (req: Request, res: Response) => {
+  try {
+    // Get unsold players (players where `isSold` is false or not set)
+    const players = await Player.find({
+      $and: [{ isSold: false }], // Match either false or unset
+    }).select("_id playerName"); // Select only _id and playerName fields
+
+    return res.status(200).json({
+      success: true,
+      data: players,
+    });
+  } catch (error: any) {
+    return res.status(500).json({
+      success: false,
+      message: "Error fetching unsold player data",
       error: error.message,
     });
   }

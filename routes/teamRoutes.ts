@@ -4,6 +4,7 @@ import {
   getTeamData,
   getTeamPlayerData,
   getPlayerData,
+  getUnsoldPlayers,
   getSoldPlayers,
   getLogs,
   getPlayerPoolData,
@@ -20,10 +21,11 @@ router.post("/logs", addLog);
 
 // GET routes for retrieving data
 router.post("/teams", getTeamData);
-router.get("/teamsplayers", getTeamPlayerData);
+router.post("/teamsplayers", getTeamPlayerData);
 router.post("/playersPocket", getPlayerPoolData);
 router.post("/players", getPlayerData);
 router.get("/sold-players", getSoldPlayers);
+router.get("/unsold-players", getUnsoldPlayers);
 router.get("/logs", getLogs);
 
 // PATCH routes for updating data
