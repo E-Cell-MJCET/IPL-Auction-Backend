@@ -8,6 +8,7 @@ import {
   getSoldPlayers,
   getLogs,
   getPlayerPoolData,
+  getPlayerDataForSellPlayer,
 } from "../controllers/getData";
 import { updateTeam, updatePlayer } from "../controllers/patchData";
 
@@ -18,6 +19,7 @@ router.post("/team", addTeam);
 router.post("/player", addPlayer);
 router.post("/sell-player", sellPlayer);
 router.post("/logs", addLog);
+router.post("/fetch-players-for-sell-player",getPlayerDataForSellPlayer)
 
 // GET routes for retrieving data
 router.post("/teams", getTeamData);

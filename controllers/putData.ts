@@ -108,7 +108,7 @@ export const sellPlayer = async (req: Request, res: Response) => {
     await connectDB();
 
     // Find the player
-    const player = await Player.findOne({ _id:playerId });
+    const player = await Player.findOne({ playerId:playerId });
     if (!player) {
       return res.status(404).json({
         success: false,
@@ -117,7 +117,7 @@ export const sellPlayer = async (req: Request, res: Response) => {
     }
     console.log("sellPlayer called 1");
     // Find the team
-    const team = await Team.findOne({ _id:teamID });
+    const team = await Team.findOne({ teamID:teamID });
     if (!team) {
       return res.status(404).json({
         success: false,

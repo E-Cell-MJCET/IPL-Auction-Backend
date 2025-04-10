@@ -23,6 +23,26 @@ export const getTeamData = async (req: Request, res: Response) => {
     });
   }
 };
+
+export const getPlayerDataForSellPlayer = async (req: Request, res: Response) => {
+  try {
+    // Get all teams with the specified fields
+    const players = await Player.find().select(
+      "playerName playerId"
+    );
+
+    return res.status(200).json({
+      success: true,
+      data: players,
+    });
+  } catch (error: any) {
+    return res.status(500).json({
+      success: false,
+      message: "Error fetching player data",
+      error: error.message,
+    });
+  }
+};
 export const getTeamPlayerData = async (req: Request, res: Response) => {
   try {
     const { teamID } = req.body;
